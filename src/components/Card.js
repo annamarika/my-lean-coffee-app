@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { responseSymbol } from "next/dist/server/web/spec-compliant/fetch-event";
 
 export default function Card(props) {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -42,8 +43,11 @@ function CardModeShow({ id, content, name, onEnableEditMode }) {
       <CardActions>
         <Button
           size="small"
-          onClick={() => {
-            console.log("Delete card", id, content, name);
+          onClick={async () => {
+            const response = await fetch("/api/card/" + id, {
+              method: "DELETE",
+            });
+            console.log(await response.json());
           }}
         >
           Delete
@@ -60,9 +64,19 @@ function CardModeEdit({ id, content, name, onDisableEditMode }) {
   const [nameValue, setNameValue] = useState(name);
   const [contentValue, setContentValue] = useState(content);
 
-  function onFormSubmit(event) {
+  async function onFormSubmit(event) {
     event.preventDefault();
-    console.log(nameValue, contentValue);
+    console.log(id, nameValue, contentValue);
+
+    const response = await fetch("/api/card/" + id, {
+      method: "PUT",
+      body: JSON.stringify({
+        content: contentValue,
+        name: nameValue,
+      }),
+    });
+    console.log(await response.json());
+
     onDisableEditMode();
   }
 
@@ -92,13 +106,7 @@ function CardModeEdit({ id, content, name, onDisableEditMode }) {
         />
       </CardContent>
       <CardActions>
-        <Button
-          type="submit"
-          size="small"
-          onClick={() => {
-            console.log("Delete card", id, content, name);
-          }}
-        >
+        <Button type="submit" size="small">
           Save
         </Button>
       </CardActions>

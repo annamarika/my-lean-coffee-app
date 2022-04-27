@@ -1,4 +1,5 @@
 import { Container, Grid, Typography } from "@mui/material";
+import CardCreateForm from "../src/components/CardCreateForm";
 
 export default function Create() {
   return (
@@ -9,6 +10,7 @@ export default function Create() {
             <Typography variant="h1">Create</Typography>
           </Grid>
         </Grid>
+        <CardCreateForm />
       </Container>
     </>
   );
