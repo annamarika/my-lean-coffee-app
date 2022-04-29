@@ -7,7 +7,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { responseSymbol } from "next/dist/server/web/spec-compliant/fetch-event";
 import { useSWRConfig } from "swr";
 
 export default function Card(props) {
