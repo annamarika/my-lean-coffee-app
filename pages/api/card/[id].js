@@ -1,18 +1,21 @@
-import { getCards } from "../../../src/services/get-cards";
+import Card from "../../../src/models/Card";
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const { id } = req.query;
 
-  const cards = getCards();
-  const singleCard = cards.find((card) => card.id === id);
+  /* const cards = getCards();
+  const singleCard = cards.find((card) => card.id === id);*/
 
   if (req.method === "DELETE") {
-    res.status(200).json({ message: "card deleted", card: singleCard });
+    const deleteCard = await Card.findByIdAndDelete(id);
+    res.status(200).json({ message: "card deleted", card: deleteCard });
   } else if (req.method === "PUT") {
-    const changedCard = JSON.parse(req.body);
+    const data = JSON.parse(req.body);
+    const changedCard = await Card.findByIdAndUpdate(id, data, { new: true });
 
     res.status(200).json({ message: "card updated", card: changedCard });
   } else {
+    const singleCard = await Card.findById(id);
     res.status(200).json(singleCard);
   }
 }
